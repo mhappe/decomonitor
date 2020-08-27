@@ -1,0 +1,120 @@
+{
+  "routes": [
+    {
+      "path": "/resources",
+      "target": {
+        "type": "service",
+        "name": "sapui5",
+        "entryPath": "/resources",
+        "version": "1.52.40"
+      },
+      "description": "SAPUI5 Resources"
+    },
+    {
+      "path": "/test-resources",
+      "target": {
+        "type": "service",
+        "name": "sapui5",
+        "entryPath": "/test-resources",
+        "version": "1.52.40"
+      },
+      "description": "SAPUI5 Test Resources"
+    },
+    {
+      "path": "/resources",
+      "target": {
+        "type": "service",
+        "name": "sapui5",
+        "entryPath": "/resources",
+        "version": "1.52.40"
+      },
+      "description": "SAPUI5 Resources"
+    },
+    {
+      "path": "/test-resources",
+      "target": {
+        "type": "service",
+        "name": "sapui5",
+        "entryPath": "/test-resources",
+        "version": "1.52.40"
+      },
+      "description": "SAPUI5 Test Resources"
+    },
+    {
+      "path": "/resources/sap/tl/ewm/lib/reuse",
+      "target": {
+        "type": "destination",
+        "name": "PRODRIVE_GW_DEV001_HTTPS",
+        "entryPath": "/sap/bc/ui5_ui5/sap/ewm_lib_reuse",
+        "preferLocal": true
+      },
+      "description": "sap/tl/ewm/lib/reuse Reuse Library"
+    },
+    {
+      "path": "/sap/opu/odata",
+      "target": {
+        "type": "destination",
+        "name": "PRODRIVE_GW_DEV001_HTTPS",
+        "entryPath": "/sap/opu/odata"
+      },
+      "description": "PRODRIVE_GW_DEV001_HTTPS"
+    },
+    {
+      "path": "/sap/bc/lrep/flex/data",
+      "target": {
+        "type": "destination",
+        "name": "PRODRIVE_GW_DEV001_HTTPS",
+        "entryPath": "/sap/bc/lrep/flex/data"
+      },
+      "description": "PRODRIVE_GW_DEV001_HTTPS"
+    },
+    {
+      "path": "/sap/bc/lrep/flex/settings",
+      "target": {
+        "type": "destination",
+        "name": "PRODRIVE_GW_DEV001_HTTPS",
+        "entryPath": "/sap/bc/lrep/flex/settings"
+      },
+      "description": "PRODRIVE_GW_DEV001_HTTPS"
+    },
+    {
+      "path": "/sap/bc/lrep/changes",
+      "target": {
+        "type": "destination",
+        "name": "PRODRIVE_GW_DEV001_HTTPS",
+        "entryPath": "/sap/bc/lrep/changes"
+      },
+      "description": "PRODRIVE_GW_DEV001_HTTPS"
+    },
+    {
+      "path": "/sap/bc/lrep/variants",
+      "target": {
+        "type": "destination",
+        "name": "S4H",
+        "entryPath": "/sap/bc/lrep/variants"
+      },
+      "description": "S4H_variants"
+    },
+    {
+      "path": "/sap/bc/ui5_ui5",
+      "target": {
+        "type": "destination",
+        "name": "PRODRIVE_GW_DEV001_HTTPS",
+        "entryPath": "/sap/bc/ui5_ui5"
+      },
+      "description": "PRODRIVE_GW_DEV001_HTTPS"
+    },
+    {
+      "path": "/resources/prodrive/EWM_DECON_MONITOR/Component",
+      "target": {
+        "type": "destination",
+        "name": "PRODRIVE_GW_DEV001_HTTPS",
+        "entryPath": "/sap/bc/lrep/flex/data/prodrive.EWM_DECON_MONITOR.Component/~ZaB1BeXEqaybF5mlhXQ2tZpv7XI=~",
+        "preferLocal": true
+      },
+      "description": "prodrive/EWM_DECON_MONITOR/Component Reuse Library"
+    }
+  ],
+  "welcomeFile": "/index.html",
+  "sendWelcomeFileRedirect": true
+}

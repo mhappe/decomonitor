@@ -1,0 +1,143 @@
+<mvc:View xmlns="sap.m" xmlns:core="sap.ui.core" xmlns:mvc="sap.ui.core.mvc" xmlns:smartFilterBar="sap.ui.comp.smartfilterbar"
+	xmlns:smartTable="sap.ui.comp.smarttable" controllerName="prodrive.EWM_DECON_MONITOR.controller.Monitor" xmlns:l="sap.ui.layout"
+	xmlns:uxap="sap.uxap" xmlns:smartVariantManagement="sap.ui.comp.smartvariants" height="100%">
+	<uxap:ObjectPageLayout id="ObjectPageLayout" upperCaseAnchorBar="false" alwaysShowContentHeader="true">
+		<uxap:headerContent>
+			<smartFilterBar:SmartFilterBar id="smartFilterBar" showRestoreOnFB="true" entitySet="StorageBinSet" showFilterConfiguration="true"
+				enableBasicSearch="false" search="onFilterBarGo" filterChange="onFilterbarFilterChange" persistencyKey="SmartFilter_Explored"></smartFilterBar:SmartFilterBar>
+		</uxap:headerContent>
+		<uxap:sections>
+			<uxap:ObjectPageSection title="{i18n>StorageBins}">
+				<uxap:subSections>
+					<uxap:ObjectPageSubSection>
+						<uxap:blocks>
+							<smartTable:SmartTable id="idStorageBinTable" entitySet="StorageBinSet" smartFilterId="smartFilterBar" tableType="ResponsiveTable"
+								useVariantManagement="false" useTablePersonalisation="true" header="{i18n>StorageBins}" showRowCount="true" showFullScreenButton="true"
+								enableAutoBinding="false" persistencyKey="ZEWM_DECON_MONSTBin">
+								<Table mode="SingleSelectMaster" selectionChange="onMasterSelectionChange" growing="true" growingThreshold="20">
+									<columns>
+										<Column id="bin.columnHandlingUnitId" demandPopin="true" minScreenWidth="Tablet">
+											<customData>
+												<core:CustomData key="p13nData"
+													value='\{"columnKey":"HuId","leadingProperty":"HandlingUnitId", "sortProperty":"HandlingUnitId", "filterProperty":"HandlingUnitId","total": false, "columnIndex" : "5"}'/>
+											</customData>
+											<Label text="{/#StorageBin/HandlingUnitId/@sap:label}" id="column.label.HandlingUnitId"/>
+										</Column>
+										<Column id="bin.columnDocumentId" demandPopin="true" minScreenWidth="Tablet">
+											<customData>
+												<core:CustomData key="p13nData"
+													value='\{"columnKey":"DocumentId","leadingProperty":"DocumentId", "sortProperty":"DocumentId", "filterProperty":"DocumentId","total": false, "columnIndex" : "6"}'/>
+											</customData>
+											<Label text="{/#StorageBin/DocumentId/@sap:label}" id="column.label.DocumentId"/>
+										</Column>
+										<Column id="bin.columnStatus" demandPopin="true" minScreenWidth="Tablet">
+											<customData>
+												<core:CustomData key="p13nData"
+													value='\{"columnKey":"StatusText","leadingProperty":"StatusText", "sortProperty":"StatusText", "filterProperty":"StatusText","total": false, "columnIndex" : "99"}'/>
+											</customData>
+											<Label text="{/#StorageBin/StatusText/@sap:label}" id="column.label.columnStatus"/>
+										</Column>
+									</columns>
+									<items>
+										<ColumnListItem vAlign="Middle">
+											<cells>
+												<Link press="onHULinkPress" text="{HandlingUnitId}" ariaLabelledBy="column.label.HandlingUnitId"
+													ariaDescribedBy="column.label.HandlingUnitId" id="idBinLinkHandlingUnitId"/>
+												<Link press="onDocumentIdLinkPress" text="{DocumentId}" ariaLabelledBy="column.label.DocumentId" ariaDescribedBy="column.label.DocumentId"
+													id="idBinLinkDocumentId"/>
+												<HBox alignContent="Start" alignItems="Baseline">
+													<core:Icon src="{StatusIcon}" color="{StatusColor}" class="sapUiTinyMarginEnd"/>
+													<Text text="{StatusText}"/></HBox>
+											</cells>
+										</ColumnListItem>
+									</items>
+								</Table>
+							</smartTable:SmartTable>
+						</uxap:blocks>
+					</uxap:ObjectPageSubSection>
+				</uxap:subSections>
+			</uxap:ObjectPageSection>
+			<uxap:ObjectPageSection title="{i18n>OpenTasks}">
+				<uxap:subSections>
+					<uxap:ObjectPageSubSection>
+						<uxap:blocks>
+							<smartTable:SmartTable id="idOpenTaskTable" entitySet="OpenTasksSet" smartFilterId="smartFilterBar" tableType="ResponsiveTable"
+								useVariantManagement="false" useTablePersonalisation="true" header="{i18n>OpenTasks}" showRowCount="true"
+								beforeRebindTable="onBeforeRebindOpenTaskTable" enableAutoBinding="false" showFullScreenButton="true" persistencyKey="ZEWM_DECON_MONSTTask">
+								<Table mode="None" growing="true" growingThreshold="20">
+									<columns>
+										<Column id="task.columnWarehouseTask" demandPopin="true" minScreenWidth="Tablet">
+											<customData>
+												<core:CustomData key="p13nData"
+													value='\{"columnKey":"WarehouseTask","leadingProperty":"WarehouseTask", "sortProperty":"WarehouseTask", "filterProperty":"WarehouseTask","total": false, "columnIndex" : "1"}'/>
+											</customData>
+											<Label text="{/#OpenTasks/WarehouseTask/@sap:label}" id="column.label.task.WarehouseTask"/>
+										</Column>
+										<Column id="task.columnDocumentId" demandPopin="true" minScreenWidth="Tablet">
+											<customData>
+												<core:CustomData key="p13nData"
+													value='\{"columnKey":"DocumentId","leadingProperty":"DocumentId", "sortProperty":"DocumentId", "filterProperty":"DocumentId","total": false, "columnIndex" : "6"}'/>
+											</customData>
+											<Label text="{/#OpenTasks/DocumentId/@sap:label}" id="column.label.task.DocumentId"/>
+										</Column>
+									</columns>
+									<items>
+										<ColumnListItem vAlign="Middle">
+											<cells>
+												<Link press="onWarehouseTaskLinkPress" text="{WarehouseTask}" ariaLabelledBy="column.label.task.WarehouseTask"
+													ariaDescribedBy="column.label.task.WarehouseTask" id="idLinkWarehouseTask"/>
+												<Link press="onDocumentIdLinkPress" text="{DocumentId}" ariaLabelledBy="column.label.task.DocumentId"
+													ariaDescribedBy="column.label.task.DocumentId" id="idTaskLinkDocumentId"/>
+											</cells>
+										</ColumnListItem>
+									</items>
+								</Table>
+							</smartTable:SmartTable>
+						</uxap:blocks>
+					</uxap:ObjectPageSubSection>
+				</uxap:subSections>
+			</uxap:ObjectPageSection>
+			<uxap:ObjectPageSection title="{i18n>DeconsolidationStock}">
+				<uxap:subSections>
+					<uxap:ObjectPageSubSection>
+						<uxap:blocks>
+							<smartTable:SmartTable id="idDecoStockTable" entitySet="DeconsolidationStockSet" smartFilterId="smartFilterBar" tableType="ResponsiveTable"
+								useVariantManagement="true" useTablePersonalisation="true" header="{i18n>DeconsolidationStock}" showRowCount="true"
+								beforeRebindTable="onBeforeRebindOpenTaskTable" enableAutoBinding="false" showFullScreenButton="true"
+								persistencyKey="ZEWM_DECON_MONDECOSTOCK">
+								<Table mode="None" growing="true" growingThreshold="20">
+									<columns>
+										<Column id="stock.columnDocumentId" demandPopin="true" minScreenWidth="Tablet">
+											<customData>
+												<core:CustomData key="p13nData"
+													value='\{"columnKey":"DocumentId","leadingProperty":"DocumentId", "sortProperty":"DocumentId", "filterProperty":"DocumentId","total": false, "columnIndex" : "5"}'/>
+											</customData>
+											<Label text="{/#DeconsolidationStock/DocumentId/@sap:label}" id="column.label.stock.DocumentId"/>
+										</Column>
+									</columns>
+									<Column id="stock.columnHandlingUnitId" demandPopin="true" minScreenWidth="Tablet">
+											<customData>
+												<core:CustomData key="p13nData"
+													value='\{"columnKey":"HuId","leadingProperty":"Huident", "sortProperty":"Huident", "filterProperty":"Huident","total": false, "columnIndex" : "6"}'/>
+											</customData>
+											<Label text="{/#DeconsolidationStock/Huident/@sap:label}" id="column.label.stock.HandlingUnitId"/>
+										</Column>
+									<items>
+										<ColumnListItem vAlign="Middle">
+											<cells>
+												<Link press="onDocumentIdLinkPress" text="{DocumentId}" ariaLabelledBy="column.label.stock.DocumentId"
+													ariaDescribedBy="column.label.stock.DocumentId" id="idStockLinkDocumentId"/>
+												<Link press="onHUIdentPress" text="{Huident}" ariaLabelledBy="column.label.stock.HandlingUnitId"
+													ariaDescribedBy="column.label.stock.HandlingUnitId" id="idStockLinkHandlingUnitId"/>
+											</cells>
+										</ColumnListItem>
+									</items>
+								</Table>
+							</smartTable:SmartTable>
+						</uxap:blocks>
+					</uxap:ObjectPageSubSection>
+				</uxap:subSections>
+			</uxap:ObjectPageSection>
+		</uxap:sections>
+	</uxap:ObjectPageLayout>
+</mvc:View>

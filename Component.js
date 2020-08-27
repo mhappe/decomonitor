@@ -1,0 +1,1 @@
+sap.ui.define(["sap/ui/core/UIComponent","sap/tl/ewm/lib/reuse/components/base/Component"],function(n,t){"use strict";return t.extend("prodrive.EWM_DECON_MONITOR.Component",{metadata:{manifest:"json"},initialPage:"monitor",init:function(){t.prototype.init.apply(this,arguments)}})});
