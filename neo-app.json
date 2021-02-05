@@ -44,7 +44,7 @@
       "path": "/resources/sap/tl/ewm/lib/reuse",
       "target": {
         "type": "destination",
-        "name": "PRODRIVE_GW_DEV001_HTTPS",
+        "name": "Prodrive_NWD",
         "entryPath": "/sap/bc/ui5_ui5/sap/ewm_lib_reuse",
         "preferLocal": true
       },
@@ -54,7 +54,7 @@
       "path": "/sap/opu/odata",
       "target": {
         "type": "destination",
-        "name": "PRODRIVE_GW_DEV001_HTTPS",
+        "name": "Prodrive_NWD",
         "entryPath": "/sap/opu/odata"
       },
       "description": "PRODRIVE_GW_DEV001_HTTPS"
@@ -63,7 +63,7 @@
       "path": "/sap/bc/lrep/flex/data",
       "target": {
         "type": "destination",
-        "name": "PRODRIVE_GW_DEV001_HTTPS",
+        "name": "Prodrive_NWD",
         "entryPath": "/sap/bc/lrep/flex/data"
       },
       "description": "PRODRIVE_GW_DEV001_HTTPS"
@@ -72,7 +72,7 @@
       "path": "/sap/bc/lrep/flex/settings",
       "target": {
         "type": "destination",
-        "name": "PRODRIVE_GW_DEV001_HTTPS",
+        "name": "Prodrive_NWD",
         "entryPath": "/sap/bc/lrep/flex/settings"
       },
       "description": "PRODRIVE_GW_DEV001_HTTPS"
@@ -81,7 +81,7 @@
       "path": "/sap/bc/lrep/changes",
       "target": {
         "type": "destination",
-        "name": "PRODRIVE_GW_DEV001_HTTPS",
+        "name": "Prodrive_NWD",
         "entryPath": "/sap/bc/lrep/changes"
       },
       "description": "PRODRIVE_GW_DEV001_HTTPS"
@@ -99,7 +99,7 @@
       "path": "/sap/bc/ui5_ui5",
       "target": {
         "type": "destination",
-        "name": "PRODRIVE_GW_DEV001_HTTPS",
+        "name": "Prodrive_NWD",
         "entryPath": "/sap/bc/ui5_ui5"
       },
       "description": "PRODRIVE_GW_DEV001_HTTPS"
@@ -108,7 +108,7 @@
       "path": "/resources/prodrive/EWM_DECON_MONITOR/Component",
       "target": {
         "type": "destination",
-        "name": "PRODRIVE_GW_DEV001_HTTPS",
+        "name": "Prodrive_NWD",
         "entryPath": "/sap/bc/lrep/flex/data/prodrive.EWM_DECON_MONITOR.Component/~ZaB1BeXEqaybF5mlhXQ2tZpv7XI=~",
         "preferLocal": true
       },

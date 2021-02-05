@@ -114,14 +114,14 @@
 											</customData>
 											<Label text="{/#DeconsolidationStock/DocumentId/@sap:label}" id="column.label.stock.DocumentId"/>
 										</Column>
-									</columns>
-									<Column id="stock.columnHandlingUnitId" demandPopin="true" minScreenWidth="Tablet">
+										<Column id="stock.columnHandlingUnitId" demandPopin="true" minScreenWidth="Tablet">
 											<customData>
 												<core:CustomData key="p13nData"
 													value='\{"columnKey":"HuId","leadingProperty":"Huident", "sortProperty":"Huident", "filterProperty":"Huident","total": false, "columnIndex" : "6"}'/>
 											</customData>
 											<Label text="{/#DeconsolidationStock/Huident/@sap:label}" id="column.label.stock.HandlingUnitId"/>
 										</Column>
+									</columns>
 									<items>
 										<ColumnListItem vAlign="Middle">
 											<cells>

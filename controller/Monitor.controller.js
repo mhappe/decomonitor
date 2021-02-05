@@ -1,1 +1,225 @@
-sap.ui.define(["sap/tl/ewm/lib/reuse/controllers/Base.controller","prodrive/EWM_DECON_MONITOR/model/formatter"],function(e,t){"use strict";return e.extend("prodrive.EWM_DECON_MONITOR.controller.Monitor",{onInit:function(){e.prototype.onInit.apply(this,arguments);var t=this;this.triggerCounter=0;this.intervalTrigger=new sap.ui.core.IntervalTrigger(0);this.intervalTrigger.addListener(function(){t.refreshModel()});var r=function(){this.getOwnerComponent().getModel().read("/UserDefaultsSet(UserName='')",{success:function(e){t.triggerCounter=0;t.intervalTrigger.setInterval(e.RefreshIntervalSeconds*1e3)}})}.bind(this);this.getOwnerComponent().getModel().metadataLoaded().then(r,r)},refreshModel:function(){this.triggerCounter+=1;if(this.triggerCounter>1){this.getOwnerComponent().getModel().refresh(true)}},onExit:function(){this.intervalTrigger.setInterval(0)},onFilterbarFilterChange:function(e){this.intervalTrigger.setInterval(0)},onHULinkPress:function(e){var t=e.getSource().getBindingContext().getObject().HandlingUnitId;var r=e.getSource().getBindingContext().getObject().WarehouseNumber;this._openHandlingUnit(t,r)},onHUIdentPress:function(e){var t=e.getSource().getBindingContext().getObject().Huident;var r=e.getSource().getBindingContext().getObject().WarehouseNumber;this._openHandlingUnit(t,r)},_openHandlingUnit:function(e,t){var r={HandlingUnitId:e,WarehouseNumber:t};this.navigateToObject("EWMHandlingUnit","displaySingle",r)},onDocumentIdLinkPress:function(e){var t=e.getSource().getBindingContext().getObject().DocumentGuid;var r=e.getSource().getBindingContext().getObject().WarehouseNumber;var i=e.getSource().getBindingContext().getObject().DocumentCategory;var n={WarehouseNumber:r,DocumentCategory:i,DocumentGuid:t};this.navigateToObject("Z_EWM_DECON_MON","displayRefDocument",n)},onWarehouseTaskLinkPress:function(e){var t=e.getSource().getBindingContext().getObject().WarehouseTask;var r=e.getSource().getBindingContext().getObject().WarehouseNumber;var i={WarehouseNumber:r,WarehouseTask:t};this.navigateToObject("EWMWarehouseTask","displaySingle",i)},navigateToObject:function(e,t,r){var i=this.getCrossAppNav();var n=i.hrefForExternal({target:{semanticObject:e,action:t},params:r});i.toExternal({target:{shellHash:n}})},onFilterBarGo:function(e){var t=this.getView().byId("idStorageBinTable").getTable();if(t){t.removeSelections()}this.triggerCounter=0;var r=this.getView().getModel().getObject("/UserDefaultsSet('')");if(this.intervalTrigger&&r){this.intervalTrigger.setInterval(r.RefreshIntervalSeconds*1e3)}},_processBinSelectionSmartTable:function(e){var t=this.getView().byId("idStorageBinTable").getTable();var r=t.getSelectedContexts();if(r[0]){e.getParameters().bindingParams.filters.push(new sap.ui.model.Filter("DocumentGuid","EQ",r[0].getObject().DocumentGuid));e.getParameters().bindingParams.filters.push(new sap.ui.model.Filter("ConsolidationGroup","EQ",r[0].getObject().ConsolidationGroup));e.getParameters().bindingParams.filters.push(new sap.ui.model.Filter("DocumentCategory","EQ",r[0].getObject().DocumentCategory));e.getParameters().bindingParams.filters.push(new sap.ui.model.Filter("DocumentType","EQ",r[0].getObject().DocumentType))}},_skipFilterBarFiltersSmartTable:function(e){var t=e.getSource().getModel().getMetaModel();var r=e.getParameters().bindingParams.filters.length;while(r--){var i=e.getParameters().bindingParams.filters[r];var n=i.aFilters.length;while(n--){var a=i.aFilters[n];if(a._bMultiFilter===true){var o=a.aFilters[0].sPath}else if(a._bMultiFilter===false){o=a.sPath}var s=t.getODataEntitySet(e.getSource().getEntitySet());var g=t.getODataEntityType(s.entityType);if(o&&!g||!t.getODataProperty(g,o)){i.aFilters.splice(n,1)}}if(i.aFilters.length===0){e.getParameters().bindingParams.filters.splice(r,1)}}},onBeforeRebindOpenTaskTable:function(e){this._skipFilterBarFiltersSmartTable(e);this._processBinSelectionSmartTable(e)},onBeforeRebindDecoStockTable:function(e){this._skipFilterBarFiltersSmartTable(e);this._processBinSelectionSmartTable(e)},onMasterSelectionChange:function(e){this.getView().byId("idOpenTaskTable").rebindTable();this.getView().byId("idDecoStockTable").rebindTable()},getCrossAppNav:function(){return sap.ushell&&sap.ushell.Container&&sap.ushell.Container.getService("CrossApplicationNavigation")}})});
+/*global location history */
+sap.ui.define([
+	"sap/tl/ewm/lib/reuse/controllers/Base.controller",
+	"prodrive/EWM_DECON_MONITOR/model/formatter"
+], function (BaseController, formatter) {
+	"use strict";
+
+	return BaseController.extend("prodrive.EWM_DECON_MONITOR.controller.Monitor", {
+
+		// formatter: formatter
+
+		/* =========================================================== */
+		/* lifecycle methods                                           */
+		/* =========================================================== */
+
+		/**
+		 * Called when the worklist controller is instantiated.
+		 * @public
+		 */
+
+		onInit: function () {
+			BaseController.prototype.onInit.apply(this, arguments);
+
+			var that = this;
+			this.triggerCounter = 0;
+			this.intervalTrigger = new sap.ui.core.IntervalTrigger(0);
+			this.intervalTrigger.addListener(function () {
+				that.refreshModel();
+			});
+			// When metadata of the main model is loaded, get user parameters, in case
+			// a mandatory parameter is missing, the EWM user parameter popup is displayed
+			// to maintain the missing parameters
+			var fnGetUserDefaultParameters = function () {
+				this.getOwnerComponent().getModel().read("/UserDefaultsSet(UserName='')", {
+					success: function (oData) {
+						that.triggerCounter = 0;
+						that.intervalTrigger.setInterval(oData.RefreshIntervalSeconds * 1000); // * 1000 as property is in seconds
+					}
+				});
+
+			}.bind(this);
+			// Read parameters, error is handled by the base controller
+			this.getOwnerComponent().getModel().metadataLoaded().then(fnGetUserDefaultParameters, fnGetUserDefaultParameters);
+
+		},
+		refreshModel: function () {
+			this.triggerCounter += 1;
+			if (this.triggerCounter > 1) {
+				// No referesh for fist trigger as model is just loaded
+				this.getOwnerComponent().getModel().refresh(true);
+			}
+		},
+		onExit: function () {
+			this.intervalTrigger.setInterval(0);
+		},
+
+		onFilterbarFilterChange: function (oEvent) {
+			this.intervalTrigger.setInterval(0);
+		},
+
+		/**
+		 * Navigate to handling unit
+		 * @public
+		 */
+		onHULinkPress: function (oEvent) {
+			var sHandlingUnitId = oEvent.getSource().getBindingContext().getObject().HandlingUnitId;
+			var sWareHouseNumber = oEvent.getSource().getBindingContext().getObject().WarehouseNumber;
+			this._openHandlingUnit(sHandlingUnitId, sWareHouseNumber);
+		},
+
+		onHUIdentPress: function (oEvent) {
+			var sHandlingUnitId = oEvent.getSource().getBindingContext().getObject().Huident;
+			var sWareHouseNumber = oEvent.getSource().getBindingContext().getObject().WarehouseNumber;
+			this._openHandlingUnit(sHandlingUnitId, sWareHouseNumber);
+		},
+
+		_openHandlingUnit: function (sHandlingUnitId, sWarehouseNumber) {
+			var oParams = {
+				"HandlingUnitId": sHandlingUnitId,
+				"WarehouseNumber": sWarehouseNumber
+			};
+
+			this.navigateToObject("EWMHandlingUnit", "displaySingle", oParams);
+		},
+		/**
+		 * Navigate to reference document
+		 * @public
+		 */
+		onDocumentIdLinkPress: function (oEvent) {
+			var sDocumentGuid = oEvent.getSource().getBindingContext().getObject().DocumentGuid;
+			var sWareHouseNumber = oEvent.getSource().getBindingContext().getObject().WarehouseNumber;
+			var sDocumentCategory = oEvent.getSource().getBindingContext().getObject().DocumentCategory;
+			var oParams = {
+				"WarehouseNumber": sWareHouseNumber,
+				"DocumentCategory": sDocumentCategory,
+				"DocumentGuid": sDocumentGuid
+			};
+			this.navigateToObject("Z_EWM_DECON_MON", "displayRefDocument", oParams);
+		},
+
+		onWarehouseTaskLinkPress: function (oEvent) {
+			var sWarehouseTask = oEvent.getSource().getBindingContext().getObject().WarehouseTask;
+			var sWareHouseNumber = oEvent.getSource().getBindingContext().getObject().WarehouseNumber;
+			var oParams = {
+				"WarehouseNumber": sWareHouseNumber,
+				"WarehouseTask": sWarehouseTask
+			};
+			this.navigateToObject("EWMWarehouseTask", "displaySingle", oParams);
+		},
+
+		navigateToObject: function (sSemanticObject, sSemanticObjectAction, oParams) {
+			var oCrossAppNav = this.getCrossAppNav();
+			var sHref = oCrossAppNav.hrefForExternal({
+				target: {
+					semanticObject: sSemanticObject,
+					action: sSemanticObjectAction
+				},
+				params: oParams
+			});
+
+			oCrossAppNav.toExternal({
+				target: {
+					shellHash: sHref
+				}
+			});
+
+		},
+		onFilterBarGo: function (oEvent) {
+			// On new selection clear table selections
+			var oStockTable = this.getView().byId("idStorageBinTable").getTable();
+			if (oStockTable) {
+				oStockTable.removeSelections();
+			}
+			// Enable auto refresh
+			this.triggerCounter = 0;
+			var oUserDefaults = this.getView().getModel().getObject("/UserDefaultsSet('')");
+			if (this.intervalTrigger && oUserDefaults) {
+				// Get the refreshInterval
+				this.intervalTrigger.setInterval(oUserDefaults.RefreshIntervalSeconds * 1000); // * 1000 as property is in seconds
+			}
+
+		},
+
+		_processBinSelectionSmartTable: function (oRebindEvent) {
+			// In case an entry of the master table is selected, filter detail table for selected entry
+			// There is backend locked which determines which tasks should be visible
+			// For this logic the fields DocumentGuid, Consolidation group,
+			// Document category and documenttype should be set as filter values
+			var oStockTable = this.getView().byId("idStorageBinTable").getTable();
+			var aSelectedItemContexts = oStockTable.getSelectedContexts();
+			if (aSelectedItemContexts[0]) {
+				// Only one item could be selected
+				oRebindEvent.getParameters().bindingParams.filters.push(new sap.ui.model.Filter("DocumentGuid", "EQ", aSelectedItemContexts[0].getObject()
+					.DocumentGuid));
+				oRebindEvent.getParameters().bindingParams.filters.push(new sap.ui.model.Filter("ConsolidationGroup", "EQ",
+					aSelectedItemContexts[
+						0].getObject()
+					.ConsolidationGroup));
+				oRebindEvent.getParameters().bindingParams.filters.push(new sap.ui.model.Filter("DocumentCategory", "EQ", aSelectedItemContexts[
+						0]
+					.getObject()
+					.DocumentCategory));
+				oRebindEvent.getParameters().bindingParams.filters.push(new sap.ui.model.Filter("DocumentType", "EQ", aSelectedItemContexts[0].getObject()
+					.DocumentType));
+			}
+		},
+
+		_skipFilterBarFiltersSmartTable: function (oRebindEvent) {
+			// Filter out properties which are not available in the entityset.
+			// Filters transported from smartfilterbar to table
+			var oMetaModel = oRebindEvent.getSource().getModel().getMetaModel();
+			var i = oRebindEvent.getParameters().bindingParams.filters.length;
+			while (i--) {
+				var mainFilter = oRebindEvent.getParameters().bindingParams.filters[i];
+				var j = mainFilter.aFilters.length;
+				while (j--) {
+					var oPropertyFilter = mainFilter.aFilters[j];
+					// get the filter property
+					if (oPropertyFilter._bMultiFilter === true) {
+						var sPath = oPropertyFilter.aFilters[0].sPath;
+					} else if (oPropertyFilter._bMultiFilter === false) {
+						sPath = oPropertyFilter.sPath;
+					}
+					var oEntitySet = oMetaModel.getODataEntitySet(oRebindEvent.getSource().getEntitySet());
+					var oEntityType = oMetaModel.getODataEntityType(oEntitySet.entityType);
+					if (sPath && !oEntityType || !oMetaModel.getODataProperty(oEntityType, sPath)) {
+						mainFilter.aFilters.splice(j, 1);
+
+					}
+				}
+				if (mainFilter.aFilters.length === 0) {
+					oRebindEvent.getParameters().bindingParams.filters.splice(i, 1);
+				}
+			}
+		},
+
+		onBeforeRebindOpenTaskTable: function (oEvent) {
+			// Filter out properties which are not available in the entityset.
+			this._skipFilterBarFiltersSmartTable(oEvent);
+
+			// Filter out selected records from master Bin table
+			this._processBinSelectionSmartTable(oEvent);
+		},
+		onBeforeRebindDecoStockTable: function (oEvent) {
+			// Filter out properties which are not available in the entityset.
+			this._skipFilterBarFiltersSmartTable(oEvent);
+			// Filter out selected records from master Bin table
+			this._processBinSelectionSmartTable(oEvent);
+		},
+		onMasterSelectionChange: function (oEvent) {
+			// Selection on Bin table changed, rebind open tasks and deco stocl
+			this.getView().byId("idOpenTaskTable").rebindTable();
+			this.getView().byId("idDecoStockTable").rebindTable();
+		},
+
+		getCrossAppNav: function () {
+			return sap.ushell && sap.ushell.Container && sap.ushell.Container.getService("CrossApplicationNavigation");
+		}
+
+		/* =========================================================== */
+		/* event handlers                                              */
+		/* =========================================================== */
+
+	});
+});
